@@ -18,6 +18,9 @@ MenuManager.prototype.KeyAbility = function(key) {
     if (["RepeatUp","RepeatDown","RepeatLeft","RepeatRight"].indexOf(key)>=0) {return;}
     this.ability_user = this.main_stats.choice;
     if (["Enter","ArrowRight"," "].indexOf(key)>=0) {
+        if (this.ability_bundle_menu.choices.length == 0) {
+            return;
+        }
         this.menu_state = "AbilityBundle";
         this.main_stats.active = 0;
         this.generate_ability_menu(false);
@@ -136,6 +139,9 @@ MenuManager.prototype.generate_ability_menu = function(regenerate=false) {
     var colors = [];
     var right_text = [];
     var ability_bundle = this.ability_bundle_menu.get_choice();
+    if (!ability_bundle) {
+        return;
+    }
     for (var i=0; i<ability_database.ability_bundles[ability_bundle].abilities.length; i++) {
         var ability = ability_database.ability_bundles[ability_bundle].abilities[i];
         var can_use = true;
