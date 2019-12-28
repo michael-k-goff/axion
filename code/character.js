@@ -171,6 +171,12 @@ class Character {
         var d = Math.sqrt(deltax*deltax + deltay*deltay);
         deltax = deltax / d * delta * this.stance_speed;
         deltay = deltay / d * delta * this.stance_speed;
+        // Process hovering while executing a move
+        if (this.hover_time && this.hover_time > 0) {
+            deltax = 0;
+            deltay = 0;
+            this.hover_time -= delta;
+        }
         this.attempt_move(this,
             this.battle_object.x + deltax, this.battle_object.y + deltay,
             this.battle_object.x, this.battle_object.y);
@@ -324,6 +330,11 @@ class Character {
         this.mission.command = "";
         this.charge = 0;
         actions[c].execute(this, this.mission.target);
+        // Save some targetting info so the character doesn't bounce away immediately
+        if (this.mission.target) {
+            this.hover_target = this.mission_target;
+            this.hover_time = 1;
+        }
     }
     generate_battle_menu() { // Return the main menu for battle.
         var keys = ["attack"];
