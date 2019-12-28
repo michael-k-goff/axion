@@ -197,7 +197,7 @@ CutSceneConvo.prototype.display = function(hud_bmp) {
 class CutSceneOpen extends CutScene {
 	constructor(input) {
 		super(input);
-		this.main_menu = new Menu(["load","new"],["Load Game","New Game"],[0,0,230,100]);
+		this.main_menu = new Menu(["load","new1","new2"],["Load Game","New Game (Casual)","New Game (Hardcore)"],[0,0,360,130]);
 		this.hot_keys = new Rectangle(window.innerWidth-600,0,window.innerWidth,window.innerHeight);
 		this.info = new Rectangle(0,130,530,window.innerHeight);
 		this.suppress_map = 1;
@@ -217,7 +217,13 @@ CutSceneOpen.prototype.process_key = function(key) {
 		cut_scenes.hide_window(this.info,-300,0);
 		cut_scenes.hide_menu(this.main_menu,-300,0);
 		cut_scenes.hide_window(this.hot_keys,600,0);
-		if (this.main_menu.get_choice() == "new") {
+		if (this.main_menu.get_choice() == "new1") {
+			stats.casual = 1;
+		}
+		if (this.main_menu.get_choice() == "new2") {
+			stats.casual = 0;
+		}
+		if (this.main_menu.get_choice() == "new1" || this.main_menu.get_choice() == "new2") {
 			return {"done":1,"cutscene": new CutSceneConvo({"text":[`${stats.heroes[0].name}: Drat, I overslept. I need to check in with Orin. But I really don't want to.`]})};
 		}
 		return {"done":1};

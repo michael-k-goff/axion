@@ -400,6 +400,9 @@ Character.prototype.attack_power = function() {
             atk += this.status_effects[i].value;
         }
     }
+    if (stats.casual) {
+        atk = (atk+1)*1.1;
+    }
     return parseInt(atk);
 }
 // Get the defense power, taking equipment into account
@@ -421,6 +424,9 @@ Character.prototype.defense_power = function() {
         if (this.status_effects[i].effect == "defense_up") {
             def += this.status_effects[i].value;
         }
+    }
+    if (stats.casual) {
+        def = (def+1)*1.1;
     }
     return parseInt(def);
 }
@@ -454,7 +460,11 @@ Character.prototype.magic_power = function() {
     if ("magic_level" in class_database[this.class] && this.class in this.element_levels) {
         class_modifier += class_database[this.class].magic_level * this.element_levels[this.class];
     }
-    return parseInt(mag * class_modifier);
+    mag = mag * class_modifier;
+    if (stats.casual) {
+        mag = (mag+1)*1.1;
+    }
+    return parseInt(mag);
 }
 // Get max HP, taking equipment into account
 Character.prototype.hp_power = function() {

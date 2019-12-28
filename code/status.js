@@ -32,9 +32,9 @@ class StatusManager {
         this.treasures = {}; // Which treasures are opened.
         this.plot = {"Hint":"I need to talk with Orin, who is the town blacksmith and my boss. He will give me an assignment. I really don't like my job, though."}; // Plot triggers
         this.waypoint = ["Town",11,45]; // Where to respawn after death or reloading game
+        this.casual = 0; // Whether we are in causual mode.
         // Miscellaneous stuff
         this.last_targets = {"enemy":0,"hero":0};
-
     }
     start_battle(enemies) {
         this.last_targets = {"enemy":0, "hero":0};
@@ -132,7 +132,7 @@ class StatusManager {
         for (var i=0; i<this.heroes.length; i++) {
             for (var j=0; j<this.heroes[i].elements.length; j++) {
                 var elt_type = this.heroes[i].elements[j][0]
-                if (elt_type.length > 0) {
+                if (elt_type.length > 0 && this.casual != 0) {
                     this.heroes[i].elements[j][1] = 0; // >:(
                 }
             }
@@ -567,7 +567,7 @@ StatusManager.prototype.missing_element_prereqs = (hero, element) => {
 
 StatusManager.prototype.save = function() {
     var save_stats = {};
-    top_keys = ["gold", "items", "equipment", "elements","treasures","plot","waypoint"];
+    top_keys = ["gold", "items", "equipment", "elements","treasures","plot","waypoint","casual"];
     top_keys.map((x)=>save_stats[x]=stats[x]);
     hero_keys = ["maxhp", "hp", "mp", "maxmp", "strength", "stamina", "agility",
         "magic", "equipment", "elements", "element_levels", "name", "class",
@@ -589,7 +589,7 @@ StatusManager.prototype.load = function() {
         // Load everything one at a time. Maybe not the best, but we can't just copy over the old object.
         loaded = JSON.parse(loaded);
 
-        top_keys = ["gold", "items", "equipment", "elements", "treasures","plot","waypoint"];
+        top_keys = ["gold", "items", "equipment", "elements", "treasures","plot","waypoint","casual"];
         top_keys.map((x)=>stats[x]=loaded[x]);
         hero_keys = ["maxhp", "hp", "mp", "maxmp", "strength", "stamina", "agility",
             "magic", "equipment", "elements", "element_levels", "name", "class",
